@@ -13,13 +13,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # wget -> check_drupal
 # curl -> check_wordpress_update
 # dnsutils -> check_dns
-# ssmpt -> mail handling
+# postfix -> mail handling
 RUN apt-get update && \ 
 	apt-get install -y --no-install-recommends \
 	supervisor \
 	wget \
 	curl \
-	ssmtp \
+	postfix \
 	nagios3 \
 	monitoring-plugins \
 	nagios-nrpe-plugin \
@@ -31,11 +31,11 @@ RUN apt-get clean && \
 
 # Configure apache and the nagios daemon to start on boot
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
+ADD sources.list /etc/apt/sources.list
 ADD setup-on-run.sh /setup-on-run.sh
 
-RUN echo "Europe/Berlin" > /etc/timezone && \
-	cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+RUN echo "Asia/Shanghai" > /etc/timezone && \
+	cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 ##
 # Apache2 setup.
